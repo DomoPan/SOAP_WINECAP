@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:winecapws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/" name="winecapws" targetNamespace="urn:winecapws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:winecapws">
+      <xsd:complexType name="sensor">
+        <xsd:all>
+          <xsd:element name="sensorName" type="xsd:string" />
+          <xsd:element name="sensorMac" type="xsd:string" />
+          <xsd:element name="lastConnection" type="xsd:long" />
+          <xsd:element name="rfTX" type="xsd:int" />
+          <xsd:element name="rfRX" type="xsd:int" />
+          <xsd:element name="battery" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="sensors">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns:sensor[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="history">
+        <xsd:all>
+          <xsd:element name="timeStamp" type="xsd:long" />
+          <xsd:element name="value" type="xsd:float" />
+          <xsd:element name="invalid" type="xsd:int" />
+          <xsd:element name="alarm" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="histories">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns:history[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="measures">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns:measure[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="measure">
+        <xsd:all>
+          <xsd:element name="sensorName" type="xsd:string" />
+          <xsd:element name="sensorMac" type="xsd:string" />
+          <xsd:element name="channel" type="xsd:int" />
+          <xsd:element name="channelType" type="xsd:int" />
+          <xsd:element name="timeStamp" type="xsd:long" />
+          <xsd:element name="value" type="xsd:float" />
+          <xsd:element name="invalid" type="xsd:int" />
+          <xsd:element name="alarm" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="totdeg">
+        <xsd:all>
+          <xsd:element name="gg412" type="xsd:float" />
+          <xsd:element name="ggReal" type="xsd:float" />
+          <xsd:element name="dayTot" type="xsd:int" />
+          <xsd:element name="dayValid" type="xsd:int" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="daydeg">
+        <xsd:all>
+          <xsd:element name="timestamp" type="xsd:long" />
+          <xsd:element name="valid" type="xsd:boolean" />
+          <xsd:element name="tAve" type="xsd:float" />
+          <xsd:element name="gg412" type="xsd:float" />
+          <xsd:element name="ggReal" type="xsd:float" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="daydegs">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns:daydeg[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="totdegs">
+        <xsd:complexContent mixed="false">
+          <xsd:restriction base="soapenc:Array">
+            <xsd:attribute wsdl:arrayType="tns:totdeg[]" ref="soapenc:arrayType" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getCurrentValuesRequest">
+    <wsdl:part name="wsLicense" type="xsd:string" />
+    <wsdl:part name="wliMac" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getCurrentValuesResponse">
+    <wsdl:part name="result" type="tns:measures" />
+  </wsdl:message>
+  <wsdl:message name="getSensorListRequest">
+    <wsdl:part name="wsLicense" type="xsd:string" />
+    <wsdl:part name="wliMac" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="getSensorListResponse">
+    <wsdl:part name="result" type="tns:sensors" />
+  </wsdl:message>
+  <wsdl:message name="getChannelHistoryRequest">
+    <wsdl:part name="wsLicense" type="xsd:string" />
+    <wsdl:part name="wliMac" type="xsd:string" />
+    <wsdl:part name="sensorMac" type="xsd:string" />
+    <wsdl:part name="sensorCh" type="xsd:int" />
+    <wsdl:part name="dateFrom" type="xsd:long" />
+    <wsdl:part name="dateTo" type="xsd:long" />
+  </wsdl:message>
+  <wsdl:message name="getChannelHistoryResponse">
+    <wsdl:part name="result" type="tns:histories" />
+  </wsdl:message>
+  <wsdl:message name="getTotDegRequest">
+    <wsdl:part name="wsLicense" type="xsd:string" />
+    <wsdl:part name="wliMac" type="xsd:string" />
+    <wsdl:part name="sensorMac" type="xsd:string" />
+    <wsdl:part name="dateFrom" type="xsd:long" />
+    <wsdl:part name="dateTo" type="xsd:long" />
+    <wsdl:part name="realRif" type="xsd:float" />
+  </wsdl:message>
+  <wsdl:message name="getTotDegResponse">
+    <wsdl:part name="result" type="tns:totdeg" />
+  </wsdl:message>
+  <wsdl:message name="getDayDegRequest">
+    <wsdl:part name="wsLicense" type="xsd:string" />
+    <wsdl:part name="wliMac" type="xsd:string" />
+    <wsdl:part name="sensorMac" type="xsd:string" />
+    <wsdl:part name="dateFrom" type="xsd:long" />
+    <wsdl:part name="dateTo" type="xsd:long" />
+    <wsdl:part name="realRif" type="xsd:float" />
+  </wsdl:message>
+  <wsdl:message name="getDayDegResponse">
+    <wsdl:part name="result" type="tns:daydegs" />
+  </wsdl:message>
+  <wsdl:portType name="winecapwsPort">
+    <wsdl:operation name="getCurrentValues">
+      <wsdl:input message="tns:getCurrentValuesRequest" />
+      <wsdl:output message="tns:getCurrentValuesResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getSensorList">
+      <wsdl:input message="tns:getSensorListRequest" />
+      <wsdl:output message="tns:getSensorListResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getChannelHistory">
+      <wsdl:input message="tns:getChannelHistoryRequest" />
+      <wsdl:output message="tns:getChannelHistoryResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getTotDeg">
+      <wsdl:input message="tns:getTotDegRequest" />
+      <wsdl:output message="tns:getTotDegResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getDayDeg">
+      <wsdl:input message="tns:getDayDegRequest" />
+      <wsdl:output message="tns:getDayDegResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="winecapwsBinding" type="tns:winecapwsPort">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="getCurrentValues">
+      <soap:operation soapAction="urn:winecapwsAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSensorList">
+      <soap:operation soapAction="urn:winecapwsAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getChannelHistory">
+      <soap:operation soapAction="urn:winecapwsAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getTotDeg">
+      <soap:operation soapAction="urn:winecapwsAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDayDeg">
+      <soap:operation soapAction="urn:winecapwsAction" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:winecapws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="winecapwsService">
+    <wsdl:port name="winecapPort" binding="tns:winecapwsBinding">
+      <soap:address location="http://www.winecap.it/winecapws.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
